@@ -14,7 +14,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import com.luigui.activity.R;
 
 import iesb.byteMode.qrcodereaderview.QRCodeReaderView;
 

@@ -22,7 +22,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
-import com.luigui.activity.R;
 
 import iesb.byteMode.util.URIUtil;
 

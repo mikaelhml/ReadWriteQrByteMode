@@ -19,7 +19,6 @@ import iesb.google.zxing.WriterException;
 import iesb.google.zxing.common.BitMatrix;
 import iesb.google.zxing.qrcode.QRCodeWriter;
 
-import com.luigui.activity.R;
 
 import iesb.byteMode.binary.BinaryQRCodeWriter;
 import iesb.byteMode.model.ArquivoString;

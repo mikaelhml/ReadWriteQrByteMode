@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.luigui.activity">
+    package="iesb.byteMode.activity">
 
     <application
         android:allowBackup="true"
@@ -12,16 +12,17 @@
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
         android:fullBackupContent="@xml/backup_descriptor"
         tools:ignore="GoogleAppIndexingWarning">
-
-        <activity android:name="iesb.byteMode.activity.DecoderActivity" />
-        <activity android:name="iesb.byteMode.activity.GerarQrs" />
-        <activity android:name="iesb.byteMode.activity.MainActivity" android:label="@string/app_name">
+        <activity android:name=".MainActivity" android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-
         </activity>
+        <activity android:name=".DecoderActivity" />
+        <activity android:name=".GerarQrs" />
+
+
+
 
 
     </application>
