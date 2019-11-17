@@ -13,9 +13,9 @@
         android:fullBackupContent="@xml/backup_descriptor"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".DecoderActivity" />
-        <activity android:name=".GerarQrs" />
-        <activity android:name=".MainActivity" android:label="@string/app_name">
+        <activity android:name="iesb.byteMode.activity.DecoderActivity" />
+        <activity android:name="iesb.byteMode.activity.GerarQrs" />
+        <activity android:name="iesb.byteMode.activity.MainActivity" android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

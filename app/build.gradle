@@ -4,7 +4,7 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.1"
     defaultConfig {
-        applicationId "com.luigui"
+        applicationId "com.byteMode"
         minSdkVersion 14
         targetSdkVersion 29
     }
