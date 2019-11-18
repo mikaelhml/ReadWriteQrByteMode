@@ -21,6 +21,8 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import iesb.byteMode.constants.Contantes;
 
@@ -37,6 +39,9 @@ public class DecoderActivity extends AppCompatActivity
   private CheckBox enableDecodingCheckBox;
   private PointsOverlayView pointsOverlayView;
   private String naTela="";
+  private ArrayList<String> listaString = new ArrayList<>();
+  private Integer quantidadeQR;
+
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -92,15 +97,40 @@ public class DecoderActivity extends AppCompatActivity
     for (byte b : rawData) {
       sb.append(String.format("%02X ", b));
     }
-    String stringResult = sb.toString().replaceAll(" ","");
+    String stringResult = sb.toString().replaceAll(" ", "");
     byte[] byteResult = hexStringToByteArray(stringResult);
-    salvarArquivo(byteResult);
-    resultTextView.setText("O arquivo "+naTela+" foi salvo em Download/App/Target");
+    String result = byteArrayToString(byteResult);
+
+    if (adicionarQR(result)) {
+      salvarArquivo(byteResult);
+      resultTextView.setText("O arquivo " + naTela + " foi salvo em Download/App/Target");
+    }
+  }
+
+  private boolean adicionarQR(String result) {
+    if(listaString.size()==0){
+      quantidadeQR = Integer.valueOf(result.substring(3, 6));
+      listaString.add(result);
+    }
+    if (listaString.contains(result)){
+    }
+      if(!listaString.contains(result)){
+      listaString.add(result);
+
+    }
+    if (listaString.size() == quantidadeQR) {
+      Collections.sort(listaString);
+      return true;
+    }
+    resultTextView.setText("Foram lidos: "+listaString.size()+" Qr Codes de: "+quantidadeQR);
+    return false;
   }
 
   private void salvarArquivo(byte[] byteResult) {
-    String stringRecuperada = byteArrayToString(byteResult);
-    stringRecuperada = stringRecuperada.substring(6);
+    String stringRecuperada = "";
+    for (int i = 0; i < quantidadeQR; i++) {
+      stringRecuperada = stringRecuperada + listaString.get(i).substring(6);
+    }
     int tamanhoNomeArquivo = Integer.parseInt(stringRecuperada.substring(0, 3));
     String nomeArquivo = stringRecuperada.substring(3, tamanhoNomeArquivo + 3);
     naTela = nomeArquivo;
@@ -120,12 +150,6 @@ public class DecoderActivity extends AppCompatActivity
     } catch (IOException e) {
       e.printStackTrace();
     }
-
-
-
-
-
-
   }
 
   private String byteArrayToString(byte[] bytes) {
