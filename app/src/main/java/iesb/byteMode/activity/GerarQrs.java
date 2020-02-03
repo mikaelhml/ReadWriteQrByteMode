@@ -38,6 +38,7 @@ public class GerarQrs extends AppCompatActivity {
     private ArrayList<Bitmap> listaQR = new ArrayList<>();
     private int posicao=-1;
     private int index;
+    private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
 
 
     @Override
@@ -86,12 +87,13 @@ public class GerarQrs extends AppCompatActivity {
 
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         BinaryQRCodeWriter qrCodeWriter1 = new BinaryQRCodeWriter();
-        String teste = toHex(bytes);
+        String teste = bytesToHex(recuperarArrayByte(bytes));
+        byte[] bytes1 = recuperarArrayByte(teste);
 
         int width = 512;
         int height = 512;
         try {
-            BitMatrix byteMatrix = qrCodeWriter1.encode(bytes.getBytes(), BarcodeFormat.QR_CODE, width, height);
+            BitMatrix byteMatrix = qrCodeWriter1.encode(bytes1, BarcodeFormat.QR_CODE, width, height);
             Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
@@ -101,16 +103,23 @@ public class GerarQrs extends AppCompatActivity {
                         bmp.setPixel(x, y, Color.BLACK);
                 }
             }
-            //imageView.setImageBitmap(bmp);
             listaQR.add(bmp);
         } catch (WriterException ex) {
             Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public String toHex(String arg) {
-        return String.format("%02X", new BigInteger(1, arg.getBytes(/*YOUR_CHARSET?*/)));
+
+    public static String bytesToHex(byte[] bytes) {
+        char[] hexChars = new char[bytes.length * 2];
+        for (int j = 0; j < bytes.length; j++) {
+            int v = bytes[j] & 0xFF;
+            hexChars[j * 2] = HEX_ARRAY[v >>> 4];
+            hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
+        }
+        return new String(hexChars);
     }
+
 
     private void avancaPosicao(){
         if(posicao+1<listaQR.size()){
@@ -120,7 +129,6 @@ public class GerarQrs extends AppCompatActivity {
 
         }
         else{
-            //Toast.makeText(GerarQrs.this,"Voce já esta no ultimo QR",Toast.LENGTH_SHORT).show();
             posicao=-1;
         }
     }
@@ -157,7 +165,6 @@ public class GerarQrs extends AppCompatActivity {
 
                 }
                 else{
-                    //Toast.makeText(GerarQrs.this,"Voce já esta no ultimo QR",Toast.LENGTH_SHORT).show();
                 }
             }
         });
