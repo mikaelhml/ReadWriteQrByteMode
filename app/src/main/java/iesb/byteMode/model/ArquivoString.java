@@ -6,25 +6,23 @@ import static iesb.byteMode.constants.Contantes.CAPACIDADEQR;
 
 
 public class ArquivoString {
-    private ArrayList<String> arrayString = new ArrayList<String>();
+    private ArrayList<String> arrayString = new ArrayList<>();
     private int quantidadeQRGerado;
-    private int quantidadeQRLido;
-    private ArrayList<String> arrayLido = new ArrayList<>();
 
     public ArquivoString() {
     }
 
-    public ArquivoString(String s, String arquivoNome) {
-        dividirString(s,arquivoNome);
+    public ArquivoString(String arquivo, String arquivoNome) {
+        dividirString(arquivo, arquivoNome);
     }
 
-    private void dividirString(String s, String arquivoNome) {
-        String z = "00" + arquivoNome.length();
-        z = z.substring(z.length()-3);
-        s = arquivoNome + s;
-        s = z+s;
-        quantidadeQRGerado = (int) s.length() / CAPACIDADEQR;
-        quantidadeQRGerado += ((s.length() % CAPACIDADEQR > 0) ? 1 : 0);
+    private void dividirString(String arquivo, String arquivoNome) {
+        String tamanhoNomeArquivo = "00" + arquivoNome.length();
+        tamanhoNomeArquivo = tamanhoNomeArquivo.substring(tamanhoNomeArquivo.length() - 3);
+        arquivo = arquivoNome + arquivo;
+        arquivo = tamanhoNomeArquivo + arquivo;
+        quantidadeQRGerado = arquivo.length() / CAPACIDADEQR;
+        quantidadeQRGerado += ((arquivo.length() % CAPACIDADEQR > 0) ? 1 : 0);
         String x;
         String y;
         int contador = 0;
@@ -35,47 +33,19 @@ public class ArquivoString {
             y = "00" + quantidadeQRGerado;
             y = y.substring(y.length() - 3);
 
-                if (contador + CAPACIDADEQR > s.length()) {
-                    arrayString.add(x + y + s.substring(contador));
-                } else {
-                    arrayString.add(x + y + s.substring(contador, contador + CAPACIDADEQR));
-                    contador += CAPACIDADEQR;
-                }
+            if (contador + CAPACIDADEQR > arquivo.length()) {
+                arrayString.add(x + y + arquivo.substring(contador));
+            } else {
+                arrayString.add(x + y + arquivo.substring(contador, contador + CAPACIDADEQR));
+                contador += CAPACIDADEQR;
+            }
         }
 
-    }
-
-
-    public int getQuantidadeQRLido() {
-        return quantidadeQRLido;
-    }
-
-    public void setQuantidadeQRLido(int quantidadeQRLido) {
-        this.quantidadeQRLido = quantidadeQRLido;
-    }
-
-    public ArrayList<String> getArrayLido() {
-        return arrayLido;
-    }
-
-    public void setArrayLido(ArrayList<String> arrayLido) {
-        this.arrayLido = arrayLido;
-    }
-
-    public void setQuantidadeQRGerado(int quantidadeQRGerado) {
-        this.quantidadeQRGerado = quantidadeQRGerado;
-    }
-
-    public int getQuantidadeQRGerado() {
-        return quantidadeQRGerado;
     }
 
     public ArrayList<String> getArrayString() {
         return arrayString;
     }
 
-    public void setArrayString(ArrayList<String> arrayString) {
-        this.arrayString = arrayString;
-    }
 
 }

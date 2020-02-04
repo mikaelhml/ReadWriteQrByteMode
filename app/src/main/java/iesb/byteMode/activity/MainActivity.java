@@ -5,9 +5,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,35 +15,20 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-
 
 import iesb.byteMode.util.URIUtil;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.Objects;
-
-import iesb.byteMode.constants.Contantes;
 
 
 public class MainActivity extends AppCompatActivity {
 
 
     Button btnScanQRCode, btnCriarQRCode;
-    private ImageView imageView;
-    private TextView textQRLidos;
-    private Integer quantidadeQR;
-    private long inicio = 0, fim = 0;
-    private ArrayList<String> listaString = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,9 +83,6 @@ public class MainActivity extends AppCompatActivity {
     private void iniciaVariaveis() {
         btnCriarQRCode = (Button) findViewById(R.id.btnCriarQRCode);
         btnScanQRCode = (Button) findViewById(R.id.btnScanQRCode);
-        imageView = (ImageView) findViewById(R.id.img_Recuperada);
-        textQRLidos = (TextView) findViewById(R.id.textQRLidos);
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -116,30 +95,21 @@ public class MainActivity extends AppCompatActivity {
             Uri uri2 = Uri.parse(getRealPathFromUri(uri));
 
             File file = new File(uri2.getPath());
-            String arquivoCodificado = "";
+            String arquivoCodificado;
 
             try {
 
-                FileInputStream inputStream = new FileInputStream(file);
                 String nomeArquivo = getFileName(uri2);
                 String extensao = nomeArquivo.substring(nomeArquivo.lastIndexOf('.') + 1);
-                if (extensao.equalsIgnoreCase("JPEG") || extensao.equalsIgnoreCase("JPG") || extensao.equalsIgnoreCase("PNG")) {
-                    arquivoCodificado = codificaImagem(inputStream);
-                    nomeArquivo = nomeArquivo + arquivoCodificado.substring(0, 8);
-                    arquivoCodificado = arquivoCodificado.substring(8);
-                }
-                if (extensao.equalsIgnoreCase("TXT")) {
-                    int size = (int) file.length();
-                    byte[] bytes = new byte[size];
-                    BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
-                    buf.read(bytes, 0, bytes.length);
-                    buf.close();
-                    arquivoCodificado = byteArrayToString(bytes);
+                int size = (int) file.length();
+                byte[] bytes = new byte[size];
+                BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
+                buf.read(bytes, 0, bytes.length);
+                buf.close();
+                arquivoCodificado = byteArrayToString(bytes);
 
-                }
-                //montarImg(arquivoCodificado);
                 Intent i = new Intent(MainActivity.this, GerarQrs.class);
-                i.putExtra("string64", arquivoCodificado);
+                i.putExtra("arquivo", arquivoCodificado);
                 i.putExtra("nomeArquivo", nomeArquivo);
                 startActivity(i);
                 finish();
@@ -151,90 +121,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private String codificaImagem(FileInputStream inputStream) {
-        Bitmap b = BitmapFactory.decodeStream(inputStream);
-        int[] pixels = new int[b.getHeight() * b.getWidth()];
-        b.getPixels(pixels, 0, b.getWidth(), 0, 0, b.getWidth(), b.getHeight());
-        String largura = "000" + b.getWidth();
-        largura = largura.substring(largura.length() - 4);
-        String altura = "000" + b.getHeight();
-        altura = altura.substring(altura.length() - 4);
-        byte[] bytes = recuperarBytes(pixels);
-        return largura + altura + getArrayByte(pixels);
-    }
-
-    private byte[] recuperarBytes(int[] pixels) {
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        for (int i : pixels) {
-            byte[] bytes = ByteBuffer.allocate(4).putInt(i).array();
-            try {
-                output.write(bytes);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return output.toByteArray();
-    }
-
-    private String getArrayByte(int[] pixels) {
-        StringBuilder pixeis = new StringBuilder();
-        StringBuilder correcoes = new StringBuilder();
-        int contador = 0, index = 0;
-        for (int pixel : pixels) {
-
-            char alpha = (char) Color.alpha(pixel);
-            char red = (char) Color.red(pixel);
-            char green = (char) Color.green(pixel);
-            char blue = (char) Color.blue(pixel);
-            pixeis.append(alpha);
-            pixeis.append(red);
-            pixeis.append(green);
-            pixeis.append(blue);
-
-        }
-        return pixeis.toString();
-    }
-
-    private int[] getPixelsFromByteArray(String encoded, int tamanho) {
-        int[] pixels = new int[tamanho];
-        if (encoded.length() != tamanho * 4) {
-            int diferenca = (tamanho * 4) - encoded.length();
-            StringBuilder encodedBuilder = new StringBuilder(encoded);
-            for (int i = 0; i < diferenca; i++) {
-                encodedBuilder.append("ÿ");
-            }
-            encoded = encodedBuilder.toString();
-        }
-        int i = 0;
-        //int result = ByteBuffer.wrap(bytes).getInt();
-        for (int index = 0; index < pixels.length; index++) {
-
-            int alpha = encoded.charAt(i);
-            int red = encoded.charAt(i + 1);
-            int green = encoded.charAt(i + 2);
-            int blue = encoded.charAt(i + 3);
-            if (alpha > 255) {
-                alpha = 255;
-            }
-            if (red > 255) {
-                red = 255;
-            }
-            if (green > 255) {
-                green = 255;
-            }
-            if (blue > 255) {
-                blue = 255;
-            }
-            pixels[index] = (alpha & 0xff) << 24 | (red & 0xff) << 16 | (green & 0xff) << 8 | (blue & 0xff);
-            i += 4;
-        }
-
-        return pixels;
-    }
-
     private String byteArrayToString(byte[] bytes) {
         StringBuilder retorno = new StringBuilder();
-        StringBuilder correcoes = new StringBuilder();
         char c;
         for (byte b : bytes) {
             c = (char) b;
@@ -242,66 +130,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
         return retorno.toString();
-    }
-
-
-    private void montarImg() throws IOException {
-        String string64Remontada = "";
-        for (int i = 0; i < quantidadeQR; i++) {
-            string64Remontada = string64Remontada + listaString.get(i).substring(6);
-        }
-
-        int tamanhoNomeArquivo = Integer.parseInt(string64Remontada.substring(0, 3));
-        String fotoname = string64Remontada.substring(3, tamanhoNomeArquivo + 3);
-        String extensao = fotoname.substring(fotoname.lastIndexOf('.') + 1, fotoname.lastIndexOf('.') + 4);
-        string64Remontada = string64Remontada.substring(tamanhoNomeArquivo + 3);
-        if (extensao.equalsIgnoreCase("JPEG") || extensao.equalsIgnoreCase("JPG") || extensao.equalsIgnoreCase("PNG")) {
-            int largura = Integer.parseInt(fotoname.substring(fotoname.length() - 8, fotoname.length() - 4));
-            int altura = Integer.parseInt(fotoname.substring(fotoname.length() - 4));
-            fotoname = fotoname.substring(0, fotoname.length() - 8);
-            Bitmap bitmap = decodificaImg(string64Remontada, largura, altura);
-            salvarImg(bitmap, fotoname);
-        }
-
-        if (extensao.equalsIgnoreCase("TXT")) {
-            File newDir = new File(Contantes.PATHFILE);
-            newDir.mkdirs();
-            File file = new File(newDir, fotoname);
-            file.getParentFile().mkdirs();
-            file.createNewFile();
-            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
-            byte[] bytes = recuperarArrayByte(string64Remontada);
-            bos.write(bytes);
-            bos.flush();
-            bos.close();
-        }
-    }
-
-    private void salvarImg(Bitmap bitmap, String fotoname) {
-
-        try {
-            File newDir = new File(Contantes.PATHFILE);
-            newDir.mkdirs();
-            File file = new File(newDir, fotoname);
-            file.getParentFile().mkdirs();
-            file.createNewFile();
-            BufferedOutputStream bos = null;
-            bos = new BufferedOutputStream(new FileOutputStream(file));
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
-            bos.flush();
-            bos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private byte[] recuperarArrayByte(String g) {
-        byte[] bytesRecuperados = new byte[g.length()];
-
-        for (int i = 0; i < g.length(); i++) {
-            bytesRecuperados[i] = (byte) g.charAt(i);
-        }
-        return bytesRecuperados;
     }
 
     public String getRealPathFromUri(Uri contentUri) {
@@ -327,12 +155,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return result;
-    }
-
-    public Bitmap decodificaImg(String encoded, int largura, int altura) {
-        int[] pixels = getPixelsFromByteArray(encoded, largura * altura);
-        Bitmap bitmap = Bitmap.createBitmap(largura, altura, Bitmap.Config.ARGB_8888);
-        bitmap.setPixels(pixels, 0, largura, 0, 0, largura, altura);
-        return bitmap;
     }
 }

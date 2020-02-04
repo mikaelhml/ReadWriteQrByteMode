@@ -54,7 +54,6 @@ public class GerarQrs extends AppCompatActivity {
         for (String g : arquivoString.getArrayString()) {
 
             gerarQR(g);
-            //gerarQR(recuperarArrayByte(g));
         }
         apresentarVideoQR(listaQR);
     }
@@ -85,15 +84,12 @@ public class GerarQrs extends AppCompatActivity {
 
     private void gerarQR(String bytes) {
 
-        QRCodeWriter qrCodeWriter = new QRCodeWriter();
-        BinaryQRCodeWriter qrCodeWriter1 = new BinaryQRCodeWriter();
-        String teste = bytesToHex(recuperarArrayByte(bytes));
-        byte[] bytes1 = recuperarArrayByte(teste);
+        BinaryQRCodeWriter qrCodeWriter = new BinaryQRCodeWriter();
 
         int width = 512;
         int height = 512;
         try {
-            BitMatrix byteMatrix = qrCodeWriter1.encode(bytes1, BarcodeFormat.QR_CODE, width, height);
+            BitMatrix byteMatrix = qrCodeWriter.encode(recuperarArrayByte(bytes), BarcodeFormat.QR_CODE, width, height);
             Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
@@ -108,18 +104,6 @@ public class GerarQrs extends AppCompatActivity {
             Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-
-    public static String bytesToHex(byte[] bytes) {
-        char[] hexChars = new char[bytes.length * 2];
-        for (int j = 0; j < bytes.length; j++) {
-            int v = bytes[j] & 0xFF;
-            hexChars[j * 2] = HEX_ARRAY[v >>> 4];
-            hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
-        }
-        return new String(hexChars);
-    }
-
 
     private void avancaPosicao(){
         if(posicao+1<listaQR.size()){
@@ -173,7 +157,7 @@ public class GerarQrs extends AppCompatActivity {
 
     private void iniciaVariaveis() {
         imgQr = (ImageView) findViewById(R.id.img_QR);
-        arquivoString = new ArquivoString(getIntent().getStringExtra("string64"),getIntent().getStringExtra("nomeArquivo"));
+        arquivoString = new ArquivoString(getIntent().getStringExtra("arquivo"),getIntent().getStringExtra("nomeArquivo"));
         btnAnterior = (Button) findViewById(R.id.btnAnterior);
         btnAvancar = (Button) findViewById(R.id.btnProximo);
         btnVoltar = (Button) findViewById(R.id.btnVoltar);
