@@ -109,7 +109,7 @@ public class DecoderActivity extends AppCompatActivity
 
   private boolean adicionarQR(String result) {
     if(listaString.size()==0){
-      quantidadeQR = Integer.valueOf(result.substring(3, 6));
+      quantidadeQR = (int)result.charAt(1);
       listaString.add(result);
     }
     if (listaString.contains(result)){
@@ -129,13 +129,14 @@ public class DecoderActivity extends AppCompatActivity
   private void salvarArquivo(byte[] byteResult) {
     String stringRecuperada = "";
     for (int i = 0; i < quantidadeQR; i++) {
-      stringRecuperada = stringRecuperada + listaString.get(i).substring(6);
+      stringRecuperada = stringRecuperada + listaString.get(i).substring(2);
     }
-    int tamanhoNomeArquivo = Integer.parseInt(stringRecuperada.substring(0, 3));
-    String nomeArquivo = stringRecuperada.substring(3, tamanhoNomeArquivo + 3);
+
+    int tamanhoNomeArquivo = stringRecuperada.charAt(0);
+    String nomeArquivo = stringRecuperada.substring(1, tamanhoNomeArquivo + 1);
     naTela = nomeArquivo;
     String extensao = nomeArquivo.substring(nomeArquivo.lastIndexOf('.') + 1,nomeArquivo.lastIndexOf('.') + 4);
-    stringRecuperada = stringRecuperada.substring(tamanhoNomeArquivo + 3);
+    stringRecuperada = stringRecuperada.substring(tamanhoNomeArquivo + 1);
     File newDir = new File(Contantes.PATHFILE);
     newDir.mkdirs();
     File file = new File(newDir, nomeArquivo);

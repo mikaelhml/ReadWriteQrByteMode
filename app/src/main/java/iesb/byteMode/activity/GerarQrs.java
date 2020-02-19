@@ -15,16 +15,18 @@ import android.widget.Toast;
 
 
 import iesb.google.zxing.BarcodeFormat;
+import iesb.google.zxing.EncodeHintType;
 import iesb.google.zxing.WriterException;
 import iesb.google.zxing.common.BitMatrix;
-import iesb.google.zxing.qrcode.QRCodeWriter;
 
 
 import iesb.byteMode.binary.BinaryQRCodeWriter;
 import iesb.byteMode.model.ArquivoString;
+import iesb.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -88,8 +90,9 @@ public class GerarQrs extends AppCompatActivity {
 
         int width = 512;
         int height = 512;
+
         try {
-            BitMatrix byteMatrix = qrCodeWriter.encode(recuperarArrayByte(bytes), BarcodeFormat.QR_CODE, width, height);
+            BitMatrix byteMatrix = qrCodeWriter.encode(recuperarArrayByte(bytes), BarcodeFormat.QR_CODE, width, height, recuperaLeveldeCorrecao());
             Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
@@ -103,6 +106,26 @@ public class GerarQrs extends AppCompatActivity {
         } catch (WriterException ex) {
             Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private Map<EncodeHintType,?> recuperaLeveldeCorrecao() {
+        Hashtable<EncodeHintType, ErrorCorrectionLevel> hints = new Hashtable<>(2);
+        String nivelCorrecao = getIntent().getStringExtra("nivelCorrecao");
+        assert nivelCorrecao != null;
+        if(nivelCorrecao.equalsIgnoreCase("L")){
+            hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
+        }
+        else if(nivelCorrecao.equalsIgnoreCase("M")){
+            hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);
+        }
+        else if (nivelCorrecao.equalsIgnoreCase("Q")) {
+            hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.Q);
+        }
+        else if (nivelCorrecao.equalsIgnoreCase("H")){
+            hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+        }
+
+        return hints;
     }
 
     private void avancaPosicao(){
@@ -157,7 +180,7 @@ public class GerarQrs extends AppCompatActivity {
 
     private void iniciaVariaveis() {
         imgQr = (ImageView) findViewById(R.id.img_QR);
-        arquivoString = new ArquivoString(getIntent().getStringExtra("arquivo"),getIntent().getStringExtra("nomeArquivo"));
+        arquivoString = new ArquivoString(getIntent().getStringExtra("arquivo"),getIntent().getStringExtra("nomeArquivo"),getIntent().getIntExtra("capacidadeQR",0));
         btnAnterior = (Button) findViewById(R.id.btnAnterior);
         btnAvancar = (Button) findViewById(R.id.btnProximo);
         btnVoltar = (Button) findViewById(R.id.btnVoltar);

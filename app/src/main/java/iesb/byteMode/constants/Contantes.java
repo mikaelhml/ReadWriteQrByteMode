@@ -4,11 +4,6 @@ import android.os.Environment;
 
 public class Contantes {
 
-    public static final int CAPACIDADE_POR_NIVEL_QR = 206;
-
-    public static final int HEADER = 9;
-
-    public static final int CAPACIDADEQR = CAPACIDADE_POR_NIVEL_QR - HEADER ;
 
     public static final String PATHFILE = "/storage/emulated/0/Download/App/Target";
 
