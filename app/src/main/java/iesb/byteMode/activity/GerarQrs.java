@@ -61,8 +61,12 @@ public class GerarQrs extends AppCompatActivity {
     }
 
     private void apresentarVideoQR(final ArrayList<Bitmap> listaQR) {
-
-        new CountDownTimer(listaQR.size()*1000*10, 900) {
+        int velocidadeReproducao = 700;
+        String stringVelocidadeReproducao = getIntent().getStringExtra("velocidadeReproducao");
+        if(stringVelocidadeReproducao != "" && stringVelocidadeReproducao != null){
+            velocidadeReproducao = Integer.parseInt(stringVelocidadeReproducao);
+        }
+        new CountDownTimer(listaQR.size()*velocidadeReproducao*10, velocidadeReproducao) {
             public void onFinish() {
                 // When timer is finished
                 // Execute your code here
@@ -132,7 +136,7 @@ public class GerarQrs extends AppCompatActivity {
         if(posicao+1<listaQR.size()){
             imgQr.setImageBitmap(listaQR.get(posicao+1));
             posicao += 1;
-            textContadorQR.setText("Atual: "+(posicao+1)+"      De: "+listaQR.size());
+            textContadorQR.setText("Atual: "+(posicao+1)+"      Total: "+listaQR.size());
 
         }
         else{
@@ -155,7 +159,7 @@ public class GerarQrs extends AppCompatActivity {
                 if(posicao -1 >= 0){
                     imgQr.setImageBitmap(listaQR.get(posicao-1));
                     posicao -=1;
-                    textContadorQR.setText("Atual: "+(posicao+1)+"      De: "+listaQR.size());
+                    textContadorQR.setText("Atual: "+(posicao+1)+"      Total: "+listaQR.size());
                 }
                 else{
                     Toast.makeText(GerarQrs.this,"Voce já está no primeiro QR",Toast.LENGTH_SHORT).show();
@@ -168,10 +172,12 @@ public class GerarQrs extends AppCompatActivity {
                 if(posicao+1<listaQR.size()){
                     imgQr.setImageBitmap(listaQR.get(posicao+1));
                     posicao += 1;
-                    textContadorQR.setText("Atual: "+(posicao+1)+"      De: "+listaQR.size());
+                    textContadorQR.setText("Atual: "+(posicao+1)+"      Total: "+listaQR.size());
 
                 }
                 else{
+                    Toast.makeText(GerarQrs.this,"Voce já está no ultimo QR",Toast.LENGTH_SHORT).show();
+
                 }
             }
         });

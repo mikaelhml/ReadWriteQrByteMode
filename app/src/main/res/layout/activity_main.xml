@@ -10,20 +10,21 @@
 
     <Button
         android:id="@+id/btnScanQRCode"
+        android:text="Ler QR"
+        android:layout_toRightOf="@id/btnCriarQRCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@id/btnCriarQRCode"
         android:layout_marginTop="13dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="12dp"
-        android:text="Ler QR"
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp" />
 
     <Button
         android:id="@+id/btnCriarQRCode"
+        android:text="Gerar QR de Arquivo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -31,7 +32,6 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="13dp"
         android:layout_marginBottom="12dp"
-        android:text="Gerar QR de Arquivo"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="20dp" />
 
@@ -78,5 +78,28 @@
         android:layout_alignParentRight="true"
         android:layout_alignStart="@id/textNivelQrCode"
         android:layout_alignLeft="@id/textNivelQrCode" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Velocidade de reprodução de QR Codes (ms)"
+        android:layout_below="@id/spinCorrecao"
+        android:layout_marginTop="20dp"
+        android:textSize="18sp"
+        android:layout_alignStart="@id/spinCorrecao"
+        android:layout_alignLeft="@id/spinCorrecao" />
+
+    <EditText
+        android:id="@+id/edtVelocidadeReproducao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textView"
+        android:layout_marginTop="20dp"
+        android:layout_alignStart="@id/spinCorrecao"
+        android:ems="7"
+        android:inputType="number"
+        android:hint="500 ms"
+        android:layout_alignLeft="@id/spinCorrecao" />
 
 </RelativeLayout>

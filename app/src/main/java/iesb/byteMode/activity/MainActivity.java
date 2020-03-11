@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import iesb.byteMode.util.URIUtil;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnScanQRCode, btnCriarQRCode;
     Spinner spinCorrecao,spinNiveis;
     ArrayAdapter adapterCorrecao,adapterNiveis;
+    EditText edtVelocidadeReproducao;
     static final int[] CAPACITY_QR_CODE =
 
 
@@ -107,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
         btnScanQRCode = (Button) findViewById(R.id.btnScanQRCode);
         spinCorrecao = (Spinner) findViewById(R.id.spinCorrecao);
         spinNiveis = (Spinner) findViewById(R.id.spinNiveis);
+        edtVelocidadeReproducao = findViewById(R.id.edtVelocidadeReproducao);
         adapterCorrecao = ArrayAdapter.createFromResource(this,R.array.qr_correcao,android.R.layout.simple_dropdown_item_1line);
         adapterNiveis = ArrayAdapter.createFromResource(this,R.array.qr_niveis,android.R.layout.simple_dropdown_item_1line);
         spinCorrecao.setAdapter(adapterCorrecao);
@@ -143,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
                 i.putExtra("nomeArquivo", nomeArquivo);
                 i.putExtra("capacidadeQR",capacidadeQR);
                 i.putExtra("nivelCorrecao",spinCorrecao.getSelectedItem().toString());
+                i.putExtra("velocidadeReproducao", edtVelocidadeReproducao.getText().toString());
                 startActivity(i);
                 finish();
 
