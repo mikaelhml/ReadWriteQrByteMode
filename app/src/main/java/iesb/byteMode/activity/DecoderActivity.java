@@ -96,6 +96,9 @@ public class DecoderActivity extends AppCompatActivity
   // "points" : points where QR control points are placed
   @Override public void onQRCodeRead(String text, byte[] rawData, PointF[] points) {
     StringBuilder sb = new StringBuilder();
+    if(inicio == 0) {
+        inicio = System.currentTimeMillis()/1000;
+    }
     for (byte b : rawData) {
       sb.append(String.format("%02X ", b));
     }
@@ -228,6 +231,5 @@ public class DecoderActivity extends AppCompatActivity
       }
     });
     qrCodeReaderView.startCamera();
-    inicio = System.currentTimeMillis()/1000;
   }
 }
