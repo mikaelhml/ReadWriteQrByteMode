@@ -41,6 +41,7 @@ public class DecoderActivity extends AppCompatActivity
   private String naTela="";
   private ArrayList<String> listaString = new ArrayList<>();
   private Integer quantidadeQR;
+  private double fim,inicio;
 
 
   @Override protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +104,7 @@ public class DecoderActivity extends AppCompatActivity
 
     if (adicionarQR(result)) {
       salvarArquivo(byteResult);
-      resultTextView.setText("O arquivo " + naTela + " foi salvo em Download/App/Target");
+      resultTextView.setText("O arquivo" + naTela + " foi salvo em Download/App/Target em um total de " + (fim - inicio));
     }
   }
 
@@ -111,6 +112,9 @@ public class DecoderActivity extends AppCompatActivity
     if(listaString.size()==0){
       quantidadeQR = (int)result.charAt(1);
       listaString.add(result);
+      if(listaString.size() > 0) {
+        inicio = System.currentTimeMillis()/1000;
+      }
     }
     if (listaString.contains(result)){
     }
@@ -120,6 +124,7 @@ public class DecoderActivity extends AppCompatActivity
     }
     if (listaString.size() == quantidadeQR) {
       Collections.sort(listaString);
+      fim = System.currentTimeMillis()/1000;
       return true;
     }
     resultTextView.setText("Foram lidos: "+listaString.size()+" Qr Codes de: "+quantidadeQR);
