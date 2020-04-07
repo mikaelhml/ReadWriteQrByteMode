@@ -113,9 +113,6 @@ public class DecoderActivity extends AppCompatActivity
     if(listaString.size()==0){
       quantidadeQR = (int)result.charAt(1);
       listaString.add(result);
-      if(listaString.size() > 0) {
-          inicio = System.currentTimeMillis();
-      }
     }
     if (listaString.contains(result)){
     }
@@ -126,7 +123,7 @@ public class DecoderActivity extends AppCompatActivity
     if (listaString.size() == quantidadeQR) {
       Collections.sort(listaString);
       if(fim != 0) {
-          fim = System.currentTimeMillis();
+          fim = System.currentTimeMillis()/1000;
       }
       return true;
     }
@@ -231,5 +228,6 @@ public class DecoderActivity extends AppCompatActivity
       }
     });
     qrCodeReaderView.startCamera();
+    inicio = System.currentTimeMillis()/1000;
   }
 }
