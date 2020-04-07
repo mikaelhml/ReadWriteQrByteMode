@@ -122,7 +122,7 @@ public class DecoderActivity extends AppCompatActivity
     }
     if (listaString.size() == quantidadeQR) {
       Collections.sort(listaString);
-      if(fim != 0) {
+      if(fim == 0) {
           fim = System.currentTimeMillis()/1000;
       }
       return true;
