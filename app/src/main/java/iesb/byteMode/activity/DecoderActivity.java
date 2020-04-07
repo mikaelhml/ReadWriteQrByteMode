@@ -97,7 +97,7 @@ public class DecoderActivity extends AppCompatActivity
   @Override public void onQRCodeRead(String text, byte[] rawData, PointF[] points) {
     StringBuilder sb = new StringBuilder();
     if(inicio == 0) {
-        inicio = System.currentTimeMillis()/1000;
+        inicio = System.currentTimeMillis();
     }
     for (byte b : rawData) {
       sb.append(String.format("%02X ", b));
@@ -126,7 +126,7 @@ public class DecoderActivity extends AppCompatActivity
     if (listaString.size() == quantidadeQR) {
       Collections.sort(listaString);
       if(fim == 0) {
-          fim = System.currentTimeMillis()/1000;
+          fim = System.currentTimeMillis();
       }
       return true;
     }
